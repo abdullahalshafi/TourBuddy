@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "894463553886",
+    "firebase_url": "https://tourbuddy-9c656.firebaseio.com",
+    "project_id": "tourbuddy-9c656",
+    "storage_bucket": "tourbuddy-9c656.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:894463553886:android:6879b402218c33d9",
+        "android_client_info": {
+          "package_name": "com.example.safkat.tourbuddy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "894463553886-2cqk0lr5d9fr580hhej066jprmnjv31d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.safkat.tourbuddy",
+            "certificate_hash": "9187b2e20766306babeec1704d5d601be457e6aa"
+          }
+        },
+        {
+          "client_id": "894463553886-8l688f65plhp2j1l2m4nlk7vdmivislt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO9nWCSSUse3DnQVxUyP7ORcRvsyVcgjA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "894463553886-8l688f65plhp2j1l2m4nlk7vdmivislt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

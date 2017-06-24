@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Tour Buddy</string>
+    <string name="facebook_app_id">227031787802375</string>
+    <string name="fb_login_protocol_scheme">fb227031787802375</string>
+
+</resources>
