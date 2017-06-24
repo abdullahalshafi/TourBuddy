@@ -1,4 +1,4 @@
-package com.example.safkat.tourbuddy;
+package com.company.appbrkr.tourbuddy;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

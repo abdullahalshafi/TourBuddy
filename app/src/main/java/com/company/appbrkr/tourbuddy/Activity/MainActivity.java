@@ -1,8 +1,11 @@
-package com.company.appbrkr.tourbuddy;
+package com.company.appbrkr.tourbuddy.Activity;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.company.appbrkr.tourbuddy.R;
+import com.company.appbrkr.tourbuddy.start_fragments.login_frag;
 
 
 public class MainActivity extends AppCompatActivity {

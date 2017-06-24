@@ -1,4 +1,4 @@
-package com.company.appbrkr.tourbuddy;
+package com.company.appbrkr.tourbuddy.start_fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.company.appbrkr.tourbuddy.R;
+import com.company.appbrkr.tourbuddy.Activity.second_activity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -112,7 +114,7 @@ public class register_frag extends Fragment{
                             Toast.makeText(getContext(), "Registered successfully", Toast.LENGTH_SHORT).show();
                             getActivity().finish();
 
-                            intent=new Intent(getApplicationContext(),logged_in_activity.class);
+                            intent=new Intent(getApplicationContext(),second_activity.class);
                             startActivity(intent);
                             getActivity().overridePendingTransition(0,0);
 

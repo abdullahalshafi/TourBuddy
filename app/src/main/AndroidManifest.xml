@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.safkat.tourbuddy">
+    package="com.company.appbrkr.tourbuddy">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -37,14 +37,14 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name="com.company.appbrkr.tourbuddy.Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".logged_in_activity"></activity>
+        <activity android:name="com.company.appbrkr.tourbuddy.Activity.second_activity"></activity>
     </application>
 
 </manifest>

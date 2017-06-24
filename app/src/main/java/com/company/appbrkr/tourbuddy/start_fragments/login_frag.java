@@ -1,11 +1,9 @@
-package com.company.appbrkr.tourbuddy;
+package com.company.appbrkr.tourbuddy.start_fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +24,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.company.appbrkr.tourbuddy.R;
+import com.company.appbrkr.tourbuddy.Activity.second_activity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -127,7 +127,7 @@ public class login_frag extends Fragment {
                 public void run() {
                     progdig.dismiss();
                     getActivity().finish();
-                    intent=new Intent(getApplicationContext(),logged_in_activity.class);
+                    intent=new Intent(getApplicationContext(),second_activity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(0,0);
                 }
@@ -158,6 +158,34 @@ public class login_frag extends Fragment {
         fsining.setReadPermissions("email", "public_profile");
 
 
+
+
+        //reveal layout
+        emailLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRevealLayout();
+            }
+        });
+
+        //onclick login using email andd pass
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userLogin();
+            }
+        });
+
+        //google log in
+
+        gsignin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GsignIn();
+            }
+        });
+
         //facebook log in
 
         fsining.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -181,115 +209,7 @@ public class login_frag extends Fragment {
             }
         });
 
-
-
-        //reveal layout
-        emailLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(check==false) {
-
-                    if (Build.VERSION.SDK_INT >= 21) {
-
-                        // get the center for the clipping circle
-                        int cx = revealLayout.getWidth() / 2;
-                        int cy = 0;
-
-                        // get the final radius for the clipping circle
-                        float finalRadius = (float) Math.hypot(cx, cy);
-
-                        // create the animator for this view (the start radius is zero)
-                        Animator anim =
-                                ViewAnimationUtils.createCircularReveal(revealLayout, cx, cy, 0, finalRadius);
-
-                        // make the view visible and start the animation
-                        revealLayout.setVisibility(View.VISIBLE);
-                        anim.start();
-                        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-                        p.addRule(RelativeLayout.BELOW, R.id.revealLayout);
-                        p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-                        wrapper.setLayoutParams(p);
-                    } else {
-                        revealLayout.setVisibility(View.VISIBLE);
-                        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-                        p.addRule(RelativeLayout.BELOW, R.id.revealLayout);
-                        p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-                        wrapper.setLayoutParams(p);
-
-                    }
-                    check=true;
-                }
-                else {
-                    if (Build.VERSION.SDK_INT >= 21) {
-                        // get the center for the clipping circle
-                        int cx = revealLayout.getWidth() / 2;
-                        int cy = 0;
-
-                        // get the initial radius for the clipping circle
-                        float initialRadius = (float) Math.hypot(cx, cy);
-
-                        // create the animation (the final radius is zero)
-                        Animator anim =
-                                ViewAnimationUtils.createCircularReveal(revealLayout, cx, cy, initialRadius, 0);
-
-                        // make the view invisible when the animation is done
-                        anim.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                revealLayout.setVisibility(View.INVISIBLE);
-                            }
-                        });
-
-                        // start the animation
-                        anim.start();
-                        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-                        p.addRule(RelativeLayout.BELOW, R.id.spacer);
-                        p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-
-                        wrapper.setLayoutParams(p);
-
-                    }
-
-                    else {
-                        revealLayout.setVisibility(View.INVISIBLE);
-                        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-                        p.addRule(RelativeLayout.BELOW, R.id.spacer);
-                        p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-
-                        wrapper.setLayoutParams(p);
-
-                    }
-                    check = false;
-                }
-            }
-        });
-
-        //onclick og login using email andd pass
-
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userLogin();
-            }
-        });
-
-        //google log in
-
-        gsignin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GsignIn();
-            }
-        });
+        //textview onlick
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -304,10 +224,6 @@ public class login_frag extends Fragment {
         textView.setText("Login with Google");
         textView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
         textView.setTextSize(18);
-
-
-
-        //fsining.setText("Login with Facebook");
 
 
         return rootView;
@@ -331,7 +247,7 @@ public class login_frag extends Fragment {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(getContext(), user.toString(), Toast.LENGTH_SHORT).show();
                             getActivity().finish();
-                            intent=new Intent(getActivity(),logged_in_activity.class);
+                            intent=new Intent(getActivity(),second_activity.class);
                             startActivity(intent);
                             //updateUI(user);
                         } else {
@@ -383,7 +299,7 @@ public class login_frag extends Fragment {
                         if(task.isSuccessful()) {
                             getActivity().finish();
 
-                            intent=new Intent(getApplicationContext(),logged_in_activity.class);
+                            intent=new Intent(getApplicationContext(),second_activity.class);
                             startActivity(intent);
                             getActivity().overridePendingTransition(0,0);
 
@@ -439,7 +355,7 @@ public class login_frag extends Fragment {
                             Toast.makeText(getContext(), "Authentication successful!.",
                                     Toast.LENGTH_SHORT).show();
                             getActivity().finish();
-                            intent=new Intent(getActivity(),logged_in_activity.class);
+                            intent=new Intent(getActivity(),second_activity.class);
                             startActivity(intent);
                             // updateUI(user);
                         } else {
@@ -453,6 +369,94 @@ public class login_frag extends Fragment {
                         // ...
                     }
                 });
+    }
+
+    //reveal layout
+
+    private void setRevealLayout() {
+        if(check==false) {
+
+            if (Build.VERSION.SDK_INT >= 21) {
+
+                // get the center for the clipping circle
+                int cx = revealLayout.getWidth() / 2;
+                int cy = 0;
+
+                // get the final radius for the clipping circle
+                float finalRadius = (float) Math.hypot(cx, cy);
+
+                // create the animator for this view (the start radius is zero)
+                Animator anim =
+                        ViewAnimationUtils.createCircularReveal(revealLayout, cx, cy, 0, finalRadius);
+
+                // make the view visible and start the animation
+                revealLayout.setVisibility(View.VISIBLE);
+                anim.start();
+                RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                p.addRule(RelativeLayout.BELOW, R.id.revealLayout);
+                p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                wrapper.setLayoutParams(p);
+            } else {
+                revealLayout.setVisibility(View.VISIBLE);
+                RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                p.addRule(RelativeLayout.BELOW, R.id.revealLayout);
+                p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                wrapper.setLayoutParams(p);
+
+            }
+            check=true;
+        }
+        else {
+            if (Build.VERSION.SDK_INT >= 21) {
+                // get the center for the clipping circle
+                int cx = revealLayout.getWidth() / 2;
+                int cy = 0;
+
+                // get the initial radius for the clipping circle
+                float initialRadius = (float) Math.hypot(cx, cy);
+
+                // create the animation (the final radius is zero)
+                Animator anim =
+                        ViewAnimationUtils.createCircularReveal(revealLayout, cx, cy, initialRadius, 0);
+
+                // make the view invisible when the animation is done
+                anim.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        revealLayout.setVisibility(View.INVISIBLE);
+                    }
+                });
+
+                // start the animation
+                anim.start();
+                RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                p.addRule(RelativeLayout.BELOW, R.id.spacer);
+                p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+
+                wrapper.setLayoutParams(p);
+
+            }
+
+            else {
+                revealLayout.setVisibility(View.INVISIBLE);
+                RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                p.addRule(RelativeLayout.BELOW, R.id.spacer);
+                p.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+
+                wrapper.setLayoutParams(p);
+
+            }
+            check = false;
+        }
     }
 
 

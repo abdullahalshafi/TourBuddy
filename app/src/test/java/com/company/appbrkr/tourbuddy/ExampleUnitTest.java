@@ -1,4 +1,4 @@
-package com.example.safkat.tourbuddy;
+package com.company.appbrkr.tourbuddy;
 
 import org.junit.Test;
 

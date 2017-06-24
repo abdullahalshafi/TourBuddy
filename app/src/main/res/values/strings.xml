@@ -3,4 +3,9 @@
     <string name="facebook_app_id">227031787802375</string>
     <string name="fb_login_protocol_scheme">fb227031787802375</string>
 
+    <string name="menu_home">Home</string>
+    <string name="menu_events">Event</string>
+    <string name="menu_camera">Capture</string>
+    <string name="menu_nearby">Nearby</string>
+
 </resources>
