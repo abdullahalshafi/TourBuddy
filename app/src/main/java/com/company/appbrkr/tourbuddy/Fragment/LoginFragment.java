@@ -1,4 +1,4 @@
-package com.company.appbrkr.tourbuddy.start_fragments;
+package com.company.appbrkr.tourbuddy.Fragment;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -25,7 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.company.appbrkr.tourbuddy.R;
-import com.company.appbrkr.tourbuddy.Activity.second_activity;
+import com.company.appbrkr.tourbuddy.Activity.SecondActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -55,7 +55,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Created by Safkat on 5/27/2017.
  */
 
-public class login_frag extends Fragment {
+public class LoginFragment extends Fragment {
 
     private Button emailLogin;
     private RelativeLayout revealLayout,wrapper;
@@ -81,7 +81,7 @@ public class login_frag extends Fragment {
 
     private static Handler handler=new Handler(Looper.getMainLooper());
 
-    public login_frag() {
+    public LoginFragment() {
 
     }
 
@@ -127,7 +127,7 @@ public class login_frag extends Fragment {
                 public void run() {
                     progdig.dismiss();
                     getActivity().finish();
-                    intent=new Intent(getApplicationContext(),second_activity.class);
+                    intent=new Intent(getApplicationContext(),SecondActivity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(0,0);
                 }
@@ -214,7 +214,7 @@ public class login_frag extends Fragment {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().replace(R.id.container,new register_frag(),"REGISTER_FRAG").commit();
+                getFragmentManager().beginTransaction().replace(R.id.container,new RegisterFragment(),"REGISTER_FRAG").commit();
             }
         });
 
@@ -247,7 +247,7 @@ public class login_frag extends Fragment {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(getContext(), user.toString(), Toast.LENGTH_SHORT).show();
                             getActivity().finish();
-                            intent=new Intent(getActivity(),second_activity.class);
+                            intent=new Intent(getActivity(),SecondActivity.class);
                             startActivity(intent);
                             //updateUI(user);
                         } else {
@@ -299,7 +299,7 @@ public class login_frag extends Fragment {
                         if(task.isSuccessful()) {
                             getActivity().finish();
 
-                            intent=new Intent(getApplicationContext(),second_activity.class);
+                            intent=new Intent(getApplicationContext(),SecondActivity.class);
                             startActivity(intent);
                             getActivity().overridePendingTransition(0,0);
 
@@ -355,7 +355,7 @@ public class login_frag extends Fragment {
                             Toast.makeText(getContext(), "Authentication successful!.",
                                     Toast.LENGTH_SHORT).show();
                             getActivity().finish();
-                            intent=new Intent(getActivity(),second_activity.class);
+                            intent=new Intent(getActivity(),SecondActivity.class);
                             startActivity(intent);
                             // updateUI(user);
                         } else {

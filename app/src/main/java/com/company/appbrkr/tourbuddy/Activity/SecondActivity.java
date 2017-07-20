@@ -1,8 +1,6 @@
 package com.company.appbrkr.tourbuddy.Activity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -15,16 +13,15 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.company.appbrkr.tourbuddy.Fragment.NearbyFragment;
 import com.company.appbrkr.tourbuddy.R;
-import com.company.appbrkr.tourbuddy.main_view_fragment.expense_frag;
-import com.company.appbrkr.tourbuddy.main_view_fragment.gallery_frag;
-import com.company.appbrkr.tourbuddy.main_view_fragment.home_frag;
-import com.company.appbrkr.tourbuddy.main_view_fragment.nearby_frag;
-import com.company.appbrkr.tourbuddy.start_fragments.login_frag;
+import com.company.appbrkr.tourbuddy.Fragment.EventFragment;
+import com.company.appbrkr.tourbuddy.Fragment.GalleryFragment;
+import com.company.appbrkr.tourbuddy.Fragment.HomeFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-public class second_activity extends AppCompatActivity {
+public class SecondActivity extends AppCompatActivity {
 
     private Button logout;
     private Intent intent;
@@ -47,7 +44,7 @@ public class second_activity extends AppCompatActivity {
         mBottombar=(BottomNavigationView) findViewById(R.id.navigation);
 
         if(savedInstanceState==null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.motherView,new home_frag()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.motherView,new HomeFragment()).commit();
         }
 
         mBottombar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -56,24 +53,29 @@ public class second_activity extends AppCompatActivity {
 
                 fragmentManager=getSupportFragmentManager();
                 fragmentTransaction=fragmentManager.beginTransaction();
+                String tag;
                 /*checking the ids to server correct fragment transition*/
                 if(item.getItemId() == R.id.menu_nearby){
-                    fragment = new nearby_frag();
+                    fragment = new NearbyFragment();
+                    tag="NearbyFragment";
                     item.setChecked(true);
                 }else if(item.getItemId() == R.id.menu_events){
-                    fragment=new expense_frag();
+                    fragment=new EventFragment();
+                    tag="event_frag";
                     item.setChecked(true);
                 }else if(item.getItemId() == R.id.menu_camera){
-                    fragment=new gallery_frag();
+                    fragment=new GalleryFragment();
+                    tag="camera_frag";
                     item.setChecked(true);
                 }else {
-                    fragment = new home_frag();
+                    fragment = new HomeFragment();
+                    tag="HomeFragment";
                     item.setChecked(true);
                 }
 
                 updateToolbarText(item.getTitle());
-                fragmentTransaction.replace(R.id.motherView,fragment)
-                        .addToBackStack("").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                fragmentTransaction.replace(R.id.motherView,fragment,tag)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
 
                 return false;

@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.company.appbrkr.tourbuddy.R;
-import com.company.appbrkr.tourbuddy.start_fragments.login_frag;
+import com.company.appbrkr.tourbuddy.Fragment.LoginFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         AppEventsLogger.activateApp(this);*/
 
         if(savedInstanceState==null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.container,new login_frag(),"HOME_FRAG").commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.container,new LoginFragment(),"HOME_FRAG").commit();
         }
 
     }
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
             frag=getSupportFragmentManager().findFragmentByTag("REGISTER_FRAG");
             if(frag != null && frag.isVisible()) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.container,new login_frag(),"HOME_FRAG").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container,new LoginFragment(),"HOME_FRAG").commit();
 
             }
             frag=getSupportFragmentManager().findFragmentByTag("HOME_FRAG");

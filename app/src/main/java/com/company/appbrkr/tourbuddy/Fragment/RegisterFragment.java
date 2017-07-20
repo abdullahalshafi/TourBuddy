@@ -1,4 +1,4 @@
-package com.company.appbrkr.tourbuddy.start_fragments;
+package com.company.appbrkr.tourbuddy.Fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.company.appbrkr.tourbuddy.R;
-import com.company.appbrkr.tourbuddy.Activity.second_activity;
+import com.company.appbrkr.tourbuddy.Activity.SecondActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -30,7 +30,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Created by Safkat on 5/27/2017.
  */
 
-public class register_frag extends Fragment{
+public class RegisterFragment extends Fragment{
 
     private FirebaseAuth mAuth;
     private ProgressDialog progdig;
@@ -42,7 +42,7 @@ public class register_frag extends Fragment{
     private TextView signin;
 
 
-    public register_frag() {
+    public RegisterFragment() {
 
     }
 
@@ -72,7 +72,7 @@ public class register_frag extends Fragment{
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().replace(R.id.container,new login_frag(),"HOME_FRAG").commit();
+                getFragmentManager().beginTransaction().replace(R.id.container,new LoginFragment(),"HOME_FRAG").commit();
             }
         });
 
@@ -114,7 +114,7 @@ public class register_frag extends Fragment{
                             Toast.makeText(getContext(), "Registered successfully", Toast.LENGTH_SHORT).show();
                             getActivity().finish();
 
-                            intent=new Intent(getApplicationContext(),second_activity.class);
+                            intent=new Intent(getApplicationContext(),SecondActivity.class);
                             startActivity(intent);
                             getActivity().overridePendingTransition(0,0);
 

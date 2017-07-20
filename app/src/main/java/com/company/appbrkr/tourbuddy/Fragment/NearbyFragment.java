@@ -1,4 +1,4 @@
-package com.company.appbrkr.tourbuddy.main_view_fragment;
+package com.company.appbrkr.tourbuddy.Fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,9 +13,9 @@ import com.company.appbrkr.tourbuddy.R;
  * Created by Safkat on 6/23/2017.
  */
 
-public class home_frag extends Fragment {
+public class NearbyFragment extends Fragment {
 
-    public home_frag() {
+    public NearbyFragment() {
 
     }
 
@@ -23,7 +23,7 @@ public class home_frag extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.home_frag,container, false);
+        View rootView = inflater.inflate(R.layout.nearby_frag,container, false);
 
         return rootView;
 
