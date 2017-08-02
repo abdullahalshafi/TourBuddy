@@ -1,5 +1,7 @@
 package com.company.appbrkr.tourbuddy.Fragment;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -7,12 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -32,8 +36,9 @@ public class EventFragment extends Fragment implements View.OnClickListener{
 
     private ImageButton addEvent;
     private RecyclerView myRecycleView;
-    private String eventName,eventDesti,eventDate,eventTime,eventDes,eventBudget,cardName;
-    private ArrayList<EventModel> eventlist=new ArrayList<>();
+    private String eventName,eventDesti,eventDate,eventTime,eventDes,eventBudget,delId;
+    private ArrayList<EventModel> eventList=new ArrayList<>();
+    private static boolean check=true;
 
     public EventFragment() {
 
@@ -64,9 +69,9 @@ public class EventFragment extends Fragment implements View.OnClickListener{
         LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        if(eventlist.size()>0 && myRecycleView != null) {
+        if(eventList.size()>0 && myRecycleView != null) {
             //Setting the Adapter of the recycle view
-            myRecycleView.setAdapter(new MyAdapter(eventlist));
+            myRecycleView.setAdapter(new MyAdapter(eventList));
         }
 
         myRecycleView.setLayoutManager(layoutManager);
@@ -95,10 +100,10 @@ public class EventFragment extends Fragment implements View.OnClickListener{
 
     //Custom adapter class
 
-    public static class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
+    public  class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         private ArrayList<EventModel> list;
-
+        private String keyToDelete;
         //constructor to populate the list
         public MyAdapter(ArrayList<EventModel> data) {
             this.list=data;
@@ -118,7 +123,8 @@ public class EventFragment extends Fragment implements View.OnClickListener{
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
+        public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
 
             //setting the parameters for the views
 
@@ -126,6 +132,34 @@ public class EventFragment extends Fragment implements View.OnClickListener{
             holder.eDesti.setText(list.get(position).getEventDesti());
             holder.eDate.setText(list.get(position).getEventDate());
             holder.eTime.setText(list.get(position).getEventTime());
+
+            holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+
+                    AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
+                    builder.setTitle("Delete")
+                            .setMessage("Do you really want to delete?")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    keyToDelete=list.get(position).getDelId();
+                                    deleteEvent(keyToDelete,v.getContext());
+
+
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
+                }
+            });
 
         }
 
@@ -138,6 +172,7 @@ public class EventFragment extends Fragment implements View.OnClickListener{
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView eName,eDesti,eDate,eTime;
+        private Button deleteButton;
 
         public MyViewHolder(View v) {
             super(v);
@@ -147,10 +182,22 @@ public class EventFragment extends Fragment implements View.OnClickListener{
             eDesti=(TextView)v.findViewById(R.id.setEDestination);
             eDate=(TextView)v.findViewById(R.id.setEDate);
             eTime=(TextView)v.findViewById(R.id.setETime);
+            deleteButton=(Button) v.findViewById(R.id.deleteEBt);
         }
     }
 
 
+    private void deleteEvent(String delId, Context context) {
+        EventDatabaseOpenHelper databaseHelper=new EventDatabaseOpenHelper(context);
+        SQLiteDatabase db=databaseHelper.getWritableDatabase();
+
+        String selection= EventDatabase.DefineTable.COLUMN_NAME_DEL_ID + " LIKE ?";
+        String [] selectionArgs={delId};
+        db.delete(EventDatabase.DefineTable.TABLE_NAME,selection,selectionArgs);
+
+        getFragmentManager().beginTransaction().replace(R.id.motherView,new EventFragment()).commit();
+
+    }
 
     //initialize the list
     private void initializeList() {
@@ -169,11 +216,14 @@ public class EventFragment extends Fragment implements View.OnClickListener{
             eventTime=res.getString(3);
             eventDes=res.getString(4);
             eventBudget=res.getString(5);
+            delId=res.getString(6);
 
-            eventlist.add(new EventModel(eventName,eventDesti,eventDate,eventTime,eventDes,eventBudget));
+            eventList.add(new EventModel(eventName,eventDesti,eventDate,eventTime,eventDes,eventBudget,delId));
         }
 
 
     }
+
+
 
 }

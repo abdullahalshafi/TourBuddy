@@ -121,6 +121,7 @@ public class LoginFragment extends Fragment {
         if(mAuth.getCurrentUser()!=null) {
             progdig.setMessage("Signing in...");
             progdig.show();
+            progdig.setCancelable(false);
 
             handler.postDelayed(new Runnable() {
                 @Override
