@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
 
             //setting the parameters for the views
 
-            holder.eName.setText(list.get(position).getEventName()); //using the EventModel class to get the values of ArrayList
+          //  holder.eName.setText(list.get(position).getEventName()); //using the EventModel class to get the values of ArrayList
             holder.eDesti.setText(list.get(position).getEventDesti());
             holder.eDate.setText(list.get(position).getEventDate());
             holder.eTime.setText(list.get(position).getEventTime());
@@ -118,7 +118,7 @@ public class HomeFragment extends Fragment {
             super(v);
 
             //initializing the views
-            eName=(TextView)v.findViewById(R.id.setENameHome);
+           // eName=(TextView)v.findViewById(R.id.setENameHome);
             eDesti=(TextView)v.findViewById(R.id.setEDestinationHome);
             eDate=(TextView)v.findViewById(R.id.setEDateHome);
             eTime=(TextView)v.findViewById(R.id.setETimeHome);

@@ -6,19 +6,23 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.company.appbrkr.tourbuddy.Class.EventDatabase;
 import com.company.appbrkr.tourbuddy.Class.EventDatabaseOpenHelper;
@@ -35,7 +39,7 @@ import java.util.ArrayList;
 public class EventFragment extends Fragment implements View.OnClickListener{
 
     private ImageButton addEvent;
-    private RecyclerView myRecycleView;
+    private static RecyclerView myRecycleView;
     private String eventName,eventDesti,eventDate,eventTime,eventDes,eventBudget,delId;
     private ArrayList<EventModel> eventList=new ArrayList<>();
     private static boolean check=true;
@@ -132,6 +136,8 @@ public class EventFragment extends Fragment implements View.OnClickListener{
             holder.eDesti.setText(list.get(position).getEventDesti());
             holder.eDate.setText(list.get(position).getEventDate());
             holder.eTime.setText(list.get(position).getEventTime());
+            holder.eBudget.setText(list.get(position).getEventBudget());
+            holder.eDescription.setText(list.get(position).getEventDes());
 
             holder.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -161,6 +167,8 @@ public class EventFragment extends Fragment implements View.OnClickListener{
                 }
             });
 
+
+
         }
 
         @Override
@@ -171,8 +179,9 @@ public class EventFragment extends Fragment implements View.OnClickListener{
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView eName,eDesti,eDate,eTime;
+        private TextView eName,eDesti,eDate,eTime,eBudget,eDescription;
         private Button deleteButton;
+        private LinearLayout myLayout,myLayout1;
 
         public MyViewHolder(View v) {
             super(v);
@@ -182,7 +191,30 @@ public class EventFragment extends Fragment implements View.OnClickListener{
             eDesti=(TextView)v.findViewById(R.id.setEDestination);
             eDate=(TextView)v.findViewById(R.id.setEDate);
             eTime=(TextView)v.findViewById(R.id.setETime);
+            eBudget=(TextView) v.findViewById(R.id.setEBudget);
+            eDescription=(TextView) v.findViewById(R.id.setEDescription);
+
             deleteButton=(Button) v.findViewById(R.id.deleteEBt);
+            myLayout=(LinearLayout) v.findViewById(R.id.expendView);
+            myLayout1=(LinearLayout) v.findViewById(R.id.expendView1);
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v("Clicked","worked");
+
+                    if(myLayout.getVisibility()==View.GONE && myLayout1.getVisibility()==View.GONE) {
+                        TransitionManager.beginDelayedTransition(myRecycleView);
+                        myLayout.setVisibility(View.VISIBLE);
+                        myLayout1.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        TransitionManager.beginDelayedTransition(myRecycleView);
+                        myLayout.setVisibility(View.GONE);
+                        myLayout1.setVisibility(View.GONE);
+                    }
+                }
+            });
         }
     }
 
