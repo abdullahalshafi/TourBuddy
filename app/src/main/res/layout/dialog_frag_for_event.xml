@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Title:"
+        android:id="@+id/title"
+        android:textSize="20sp"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"/>
+    <EditText
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/title"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/setTitle"
+        android:hint="Title"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Set Destination:"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/title"
+        android:id="@+id/destination"/>
+
+    <EditText
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/destination"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/setDestination"
+        android:hint="Destination"
+        android:layout_below="@+id/setTitle"
+        android:layout_marginTop="3dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Set Date:"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/destination"
+        android:id="@+id/date"/>
+
+    <EditText
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/date"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/setDate"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/setDestination"
+        android:inputType="date"
+        android:hint="DD/MM/YY"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Set Time:"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/date"
+        android:id="@+id/time"/>
+
+    <EditText
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/date"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/setTimeHour"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/setDate"
+        android:inputType="time"
+        android:hint="HH"/>
+    <EditText
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/setTimeHour"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/setTimeMin"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/setDate"
+        android:inputType="time"
+        android:hint="MM"/>
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/setTimeMin"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/setTimeFormat"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/setDate"
+        android:entries="@array/time_format"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Approx. Budget:"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/time"
+        android:id="@+id/budget"/>
+
+    <EditText
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/budget"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/setBudget"
+        android:hint="Budget"
+        android:layout_below="@+id/setTimeFormat"
+        android:layout_marginTop="15dp"
+        android:inputType="number"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/shortDescription"
+        android:hint="write short description"
+        android:layout_below="@+id/budget"
+        android:layout_marginTop="15dp"
+        android:inputType="text"
+        android:gravity="top"
+        android:layout_marginRight="15dp"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="false"
+        android:layout_below="@+id/shortDescription"
+        android:layout_marginTop="15dp"
+        android:text="Add Event"
+        android:id="@+id/addEvent"/>
+
+
+</RelativeLayout>
