@@ -118,7 +118,7 @@ public class LoginFragment extends Fragment {
 
         //if already signed in
 
-        if(mAuth.getCurrentUser()!=null) {
+       /* if(mAuth.getCurrentUser()!=null) {
             progdig.setMessage("Signing in...");
             progdig.show();
             progdig.setCancelable(false);
@@ -133,7 +133,7 @@ public class LoginFragment extends Fragment {
                     getActivity().overridePendingTransition(0,0);
                 }
             },5000);
-        }
+        }*/
 
 
         //getting firebase token
@@ -246,7 +246,6 @@ public class LoginFragment extends Fragment {
                             // Sign in success, update UI with the signed-in user's information
                             //  Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(getContext(), user.toString(), Toast.LENGTH_SHORT).show();
                             getActivity().finish();
                             intent=new Intent(getActivity(),SecondActivity.class);
                             startActivity(intent);
@@ -463,9 +462,9 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         mGoogleApiClient.stopAutoManage(getActivity());
         mGoogleApiClient.disconnect();
+        super.onDestroy();
     }
 
 

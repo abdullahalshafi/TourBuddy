@@ -2,6 +2,7 @@ package com.company.appbrkr.tourbuddy.Fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -42,7 +43,6 @@ public class EventFragment extends Fragment implements View.OnClickListener{
     private static RecyclerView myRecycleView;
     private String eventName,eventDesti,eventDate,eventTime,eventDes,eventBudget,delId;
     private ArrayList<EventModel> eventList=new ArrayList<>();
-    private static boolean check=true;
 
     public EventFragment() {
 
@@ -80,6 +80,9 @@ public class EventFragment extends Fragment implements View.OnClickListener{
 
         myRecycleView.setLayoutManager(layoutManager);
 
+        //populate shared preference
+
+        populateEditMode(false,null);
         //onclick of floating action button
         addEvent.setOnClickListener(this);
 
@@ -97,8 +100,6 @@ public class EventFragment extends Fragment implements View.OnClickListener{
         DialogFragForEvent dialogFragForEvent=new DialogFragForEvent();
         dialogFragForEvent.setStyle(DialogFragment.STYLE_NORMAL,R.style.CustomDialog);
         dialogFragForEvent.show(fragmentManager,"Event Dialog");
-
-
 
     }
 
@@ -151,8 +152,6 @@ public class EventFragment extends Fragment implements View.OnClickListener{
                                 public void onClick(DialogInterface dialog, int which) {
                                     keyToDelete=list.get(position).getDelId();
                                     deleteEvent(keyToDelete,v.getContext());
-
-
                                     dialog.dismiss();
                                 }
                             })
@@ -167,6 +166,22 @@ public class EventFragment extends Fragment implements View.OnClickListener{
                 }
             });
 
+            holder.editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    //Firing the Dialog Fragment
+                    FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
+                    DialogFragForEvent dialogFragForEvent=new DialogFragForEvent();
+                    dialogFragForEvent.setStyle(DialogFragment.STYLE_NORMAL,R.style.CustomDialog);
+                    dialogFragForEvent.show(fragmentManager,"Event Dialog");
+
+                    //saving into shared preference
+
+                    keyToDelete=list.get(position).getDelId();
+                    populateEditMode(true,keyToDelete);
+                }
+            });
 
 
         }
@@ -180,7 +195,7 @@ public class EventFragment extends Fragment implements View.OnClickListener{
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView eName,eDesti,eDate,eTime,eBudget,eDescription;
-        private Button deleteButton;
+        private Button deleteButton,editButton;
         private LinearLayout myLayout,myLayout1;
 
         public MyViewHolder(View v) {
@@ -195,13 +210,13 @@ public class EventFragment extends Fragment implements View.OnClickListener{
             eDescription=(TextView) v.findViewById(R.id.setEDescription);
 
             deleteButton=(Button) v.findViewById(R.id.deleteEBt);
+            editButton=(Button) v.findViewById(R.id.editEBt);
             myLayout=(LinearLayout) v.findViewById(R.id.expendView);
             myLayout1=(LinearLayout) v.findViewById(R.id.expendView1);
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.v("Clicked","worked");
 
                     if(myLayout.getVisibility()==View.GONE && myLayout1.getVisibility()==View.GONE) {
                         TransitionManager.beginDelayedTransition(myRecycleView);
@@ -252,10 +267,16 @@ public class EventFragment extends Fragment implements View.OnClickListener{
 
             eventList.add(new EventModel(eventName,eventDesti,eventDate,eventTime,eventDes,eventBudget,delId));
         }
-
-
     }
 
+    private void populateEditMode(boolean check,String keyToDelete) {
+
+        SharedPreferences sharedPreferences=getActivity().getSharedPreferences("EDIT_EVENT",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean("update",check);
+        editor.putString("edit_id",keyToDelete);
+        editor.commit();
+    }
 
 
 }

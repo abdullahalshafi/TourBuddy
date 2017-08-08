@@ -20,6 +20,38 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="7"
+                android:layout_gravity="right">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
+                    <Button
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/button_anim_edit"
+                        android:layout_gravity="right"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/editEBt"
+                        android:layout_marginRight="15dp"
+                        />
+                    <Button
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/button_anim_delete"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="65dp"
+                        android:id="@+id/deleteEBt"
+                        />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_weight="1">
 
@@ -39,7 +71,7 @@
                             android:text="Event Name:"
                             android:id="@+id/title"
                             android:textSize="20sp"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="5dp"
                             android:layout_marginLeft="10dp"/>
 
 
@@ -55,7 +87,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/setEName"
                             android:textSize="20sp"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="5dp"
                             android:text="Tour"/>
 
 
@@ -262,25 +294,6 @@
             </LinearLayout>
 
                 </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="7">
-
-                <Button
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/button_anim"
-                    android:layout_gravity="right"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginBottom="5dp"
-                    android:id="@+id/deleteEBt"
-                    />
-
-            </LinearLayout>
-
-
 
         </LinearLayout>
 
