@@ -104,25 +104,28 @@ public class DialogFragForEvent extends android.support.v4.app.DialogFragment im
         eventTime = timeHour.getText().toString() + ":" + timeMin.getText().toString() + " " + timeFormat.getSelectedItem().toString();
         eventDes = description.getText().toString();
         eventBudget = budget.getText().toString();
+        if(eventName.length()>0&&eventDesti.length()>0&&eventDate.length()>0&&eventTime.length()>0&&eventDes.length()>0&&eventBudget.length()>0) {
 
-        if(addEvent.getText().toString().toLowerCase().equals("add event")) {
+            if (addEvent.getText().toString().toLowerCase().equals("add event")) {
 
-            delId = String.valueOf(System.currentTimeMillis());
-            //saving those data into the database
+                delId = String.valueOf(System.currentTimeMillis());
+                //saving those data into the database
 
-            saveIntoDatabase(eventName, eventDesti, eventDate, eventTime, eventDes, eventBudget, delId);
+                saveIntoDatabase(eventName, eventDesti, eventDate, eventTime, eventDes, eventBudget, delId);
+            } else {
+
+                updateEvent(eventName, eventDesti, eventDate, eventTime, eventDes, eventBudget, keyToEdit);
+            }
+
+            //reloading the Event Fragment, because new data has been added
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.motherView, new EventFragment(), "event_frag").commit();
+
+            //Dismissing the Dialog Fragment
+            getDialog().dismiss();
         }
-        else {
-
-            updateEvent(eventName, eventDesti, eventDate, eventTime, eventDes, eventBudget,keyToEdit);
+        else{
+            Toast.makeText(getContext(), "Please Fill all the required data!", Toast.LENGTH_SHORT).show();
         }
-
-        //reloading the Event Fragment, because new data has been added
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.motherView,new EventFragment(),"event_frag").commit();
-
-        //Dismissing the Dialog Fragment
-        getDialog().dismiss();
-
     }
 
     private void saveIntoDatabase(String eName,String eDesti, String eDate, String eTime, String eDes, String eBudget,String delId) {

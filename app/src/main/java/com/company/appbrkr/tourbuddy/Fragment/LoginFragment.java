@@ -464,8 +464,13 @@ public class LoginFragment extends Fragment {
     public void onDestroy() {
         mGoogleApiClient.stopAutoManage(getActivity());
         mGoogleApiClient.disconnect();
+        progdig.dismiss();
         super.onDestroy();
     }
 
-
+    @Override
+    public void onPause() {
+        progdig.dismiss();
+        super.onPause();
+    }
 }

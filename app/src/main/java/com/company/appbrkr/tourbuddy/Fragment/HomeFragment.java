@@ -1,22 +1,48 @@
 package com.company.appbrkr.tourbuddy.Fragment;
 
+import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.company.appbrkr.tourbuddy.Activity.SettingsActivity;
 import com.company.appbrkr.tourbuddy.Class.EventDatabase;
 import com.company.appbrkr.tourbuddy.Class.EventDatabaseOpenHelper;
 import com.company.appbrkr.tourbuddy.Class.EventModel;
 import com.company.appbrkr.tourbuddy.R;
+import com.company.appbrkr.tourbuddy.data.Channel;
+import com.company.appbrkr.tourbuddy.data.Condition;
+import com.company.appbrkr.tourbuddy.data.LocationResult;
+import com.company.appbrkr.tourbuddy.data.Units;
+import com.company.appbrkr.tourbuddy.listener.GeocodingServiceListener;
+import com.company.appbrkr.tourbuddy.listener.WeatherServiceListener;
+import com.company.appbrkr.tourbuddy.service.GoogleMapsGeocodingService;
+import com.company.appbrkr.tourbuddy.service.WeatherCacheService;
+import com.company.appbrkr.tourbuddy.service.YahooWeatherService;
 
 import java.util.ArrayList;
 
@@ -24,11 +50,31 @@ import java.util.ArrayList;
  * Created by Safkat on 6/23/2017.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements WeatherServiceListener,GeocodingServiceListener,LocationListener {
 
     private RecyclerView recyclerView;
     private String eventName,eventDesti,eventDate,eventTime,eventDes,eventBudget,delId;
     private ArrayList<EventModel> eventList=new ArrayList<>();
+
+    //Weather app property
+
+    public static int GET_WEATHER_FROM_CURRENT_LOCATION = 0x00001;
+
+    private ImageView weatherIconImageView;
+    private TextView temperatureTextView;
+    private TextView conditionTextView;
+    private TextView locationTextView;
+
+    private YahooWeatherService weatherService;
+    private GoogleMapsGeocodingService geocodingService;
+    private WeatherCacheService cacheService;
+
+   // private ProgressDialog loadingDialog;
+
+    // weather service fail flag
+    private boolean weatherServicesHasFailed = false;
+
+    private SharedPreferences preferences = null;
 
     public HomeFragment() {
 
@@ -37,6 +83,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
 
         initializeList();
     }
@@ -62,9 +111,205 @@ public class HomeFragment extends Fragment {
 
         recyclerView.setLayoutManager(layoutManager);
 
+        //Weather layout property
+
+        weatherIconImageView = (ImageView) rootView.findViewById(R.id.weatherIconImageView);
+        temperatureTextView = (TextView) rootView.findViewById(R.id.temperatureTextView);
+        conditionTextView = (TextView) rootView.findViewById(R.id.conditionTextView);
+        locationTextView = (TextView) rootView.findViewById(R.id.locationTextView);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        weatherService = new YahooWeatherService(this);
+        weatherService.setTemperatureUnit(preferences.getString(getString(R.string.pref_temperature_unit), null));
+
+        geocodingService = new GoogleMapsGeocodingService(this);
+        cacheService = new WeatherCacheService(getContext());
+
+      /*  if (preferences.getBoolean(getString(R.string.pref_needs_setup), true)) {
+            startSettingsActivity();
+        }*/
+
+
         return rootView;
 
 
+    }
+
+    //weather class method starts from here
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        /*loadingDialog = new ProgressDialog(getContext());
+        loadingDialog.setMessage(getString(R.string.loading));
+        loadingDialog.setCancelable(false);
+        loadingDialog.dismiss();
+        loadingDialog.show();*/
+
+        String location = null;
+
+        if (preferences.getBoolean(getString(R.string.pref_geolocation_enabled), true)) {
+            String locationCache = preferences.getString(getString(R.string.pref_cached_location), null);
+
+            if (locationCache == null) {
+                getWeatherFromCurrentLocation();
+            } else {
+                location = locationCache;
+            }
+        } else {
+            location = preferences.getString(getString(R.string.pref_manual_location), null);
+        }
+
+        if (location != null) {
+            weatherService.refreshWeather(location);
+        }
+
+    }
+
+    private void getWeatherFromCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+            }, GET_WEATHER_FROM_CURRENT_LOCATION);
+
+            return;
+        }
+
+        // system's LocationManager
+        final LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        Criteria locationCriteria = new Criteria();
+
+        if (isNetworkEnabled) {
+            locationCriteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        } else if (isGPSEnabled) {
+            locationCriteria.setAccuracy(Criteria.ACCURACY_FINE);
+        }
+
+        locationManager.requestSingleUpdate(locationCriteria, this, null);
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == HomeFragment.GET_WEATHER_FROM_CURRENT_LOCATION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getWeatherFromCurrentLocation();
+            } else {
+              //  loadingDialog.dismiss();
+
+                AlertDialog messageDialog = new AlertDialog.Builder(getContext())
+                        .setMessage(getString(R.string.location_permission_needed))
+                        .setPositiveButton(getString(R.string.disable_geolocation), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                startSettingsActivity();
+                            }
+                        })
+                        .create();
+
+                messageDialog.show();
+            }
+        }
+    }
+
+    private void startSettingsActivity() {
+        Intent intent = new Intent(getActivity(), SettingsActivity.class);
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location) {
+        geocodingService.refreshLocation(location);
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void serviceSuccess(Channel channel) {
+
+       // loadingDialog.dismiss();
+
+        Condition condition = channel.getItem().getCondition();
+        Units units = channel.getUnits();
+        Condition[] forecast = channel.getItem().getForecast();
+
+        int weatherIconImageResource = getResources().getIdentifier("icon_" + condition.getCode(), "drawable", getActivity().getPackageName());
+
+        weatherIconImageView.setImageResource(weatherIconImageResource);
+        temperatureTextView.setText(getString(R.string.temperature_output, condition.getTemperature(), units.getTemperature()));
+        conditionTextView.setText(condition.getDescription());
+        locationTextView.setText(channel.getLocation());
+
+        for (int day = 0; day < forecast.length; day++) {
+            if (day >= 5) {
+                break;
+            }
+
+            Condition currentCondition = forecast[day];
+
+            int viewId = getResources().getIdentifier("forecast_" + day, "id", getActivity().getPackageName());
+            WeatherConditionFragment fragment = (WeatherConditionFragment) getChildFragmentManager().findFragmentById(viewId);
+
+            if (fragment != null) {
+                fragment.loadForecast(currentCondition, channel.getUnits());
+
+            }
+        }
+
+        cacheService.save(channel);
+    }
+
+    @Override
+    public void serviceFailure(Exception exception) {
+
+        // display error if this is the second failure
+        if (weatherServicesHasFailed) {
+            //loadingDialog.dismiss();
+            Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+        } else {
+            // error doing reverse geocoding, load weather data from cache
+            weatherServicesHasFailed = true;
+            // OPTIONAL: let the user know an error has occurred then fallback to the cached data
+            Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
+
+            cacheService.load(this);
+        }
+    }
+
+    @Override
+    public void geocodeSuccess(LocationResult location) {
+
+        // completed geocoding successfully
+        weatherService.refreshWeather(location.getAddress());
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(getString(R.string.pref_cached_location), location.getAddress());
+        editor.apply();
+    }
+
+    @Override
+    public void geocodeFailure(Exception exception) {
+
+        // GeoCoding failed, try loading weather data from the cache
+        cacheService.load(this);
     }
 
     //Custom adapter class
